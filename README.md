@@ -16,7 +16,7 @@ Eklentinin amacı, okuyucularınızın karşılaştığı sorunları size anınd
 <h3>1. Eklentiyi Kurun</h3>
 <ul>
   <li>Eklentiyi aşağıdaki linkten indirin:</li>
-  <p><a href="[https://github.com/turanbagtur/manga-sorun-bildirme-eklentisi/releases/tag/sorunbildirim-v1.4]">📥 Eklenti İndirme Linki</a></p>
+  <p><a href="https://github.com/turanbagtur/manga-sorun-bildirme-eklentisi/releases/tag/sorunbildirim-v1.4">📥 Eklenti İndirme Linki</a></p>
   <li>WordPress admin panelinize gidin ve <strong>Eklentiler > Yeni Ekle > Eklenti Yükle</strong> adımlarını takip ederek indirdiğiniz ZIP dosyasını yükleyin ve etkinleştirin.</li>
 </ul>
 
