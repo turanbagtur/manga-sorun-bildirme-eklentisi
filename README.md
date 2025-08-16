@@ -1,30 +1,41 @@
-Manga Sorun Bildirim Sistemi (WordPress Eklentisi)
-<p>Manga ve webtoon siteleri için geliştirilmiş, okuyucuların bölümlerdeki hataları kolayca bildirmesini sağlayan bir WordPress eklentisidir. Gelişmiş Discord entegrasyonu sayesinde tüm bildirimler anında Discord kanalınıza düşer.</p>
+<h1>📢 Manga/Webtoon Sorun Bildirim Sistemi</h1>
 
-<h3>Özellikler</h3>
+<p>Web siteniz için kullanabileceğiniz, <strong>manga/webtoon sorun bildirim sistemi</strong> artık açık kaynak olarak paylaşılıyor. 
+Eklentinin amacı, okuyucularınızın karşılaştığı sorunları size anında ulaştırmak ve yönetimini kolaylaştırmaktır.</p>
+
+<h2>✨ Öne Çıkan Özellikler</h2>
 <ul>
-<li><strong>Hızlı ve Şık Arayüz:</strong> Kullanıcılar tek tıkla açılan şık bir form üzerinden sorunları kolayca bildirir.</li>
-<li><strong>Discord Entegrasyonu:</strong> Tüm bildirimler gerçek zamanlı olarak Discord'a iletilir.</li>
-<li><strong>Akıllı Durum Güncelleme:</strong> Yönetici panelinden bildirim durumunu güncellediğinizde (inceleniyor, çözüldü), Discord'daki mesaj da otomatik olarak değişir.</li>
-<li><strong>Misafir Desteği:</strong> Siteye üye olmayan kullanıcılar bile sorun bildirebilir.</li>
-<li><strong>Basit Yönetim:</strong> WordPress paneli üzerinden tüm bildirimleri kolayca yönetebilir ve silebilirsiniz.</li>
+  <li><strong>Hızlı ve Şık Arayüz:</strong> Okuyucular tek bir butona tıklayarak sorunu anında size iletebilir.</li>
+  <li><strong>Discord Entegrasyonu:</strong> Her bildirim, otomatik olarak Discord kanalınıza düşer. Yönetici panelinde durum güncellendiğinde (inceleniyor, çözüldü) Discord mesajı da eşzamanlı olarak güncellenir.</li>
+  <li><strong>Tam Kontrol:</strong> WordPress admin paneliniz üzerinden tüm bildirimleri görüntüleyebilir, durumlarını yönetebilir ve silebilirsiniz.</li>
+  <li><strong>Misafir Desteği:</strong> Üye olmayan okuyucular bile kolayca sorun bildirebilir.</li>
 </ul>
 
-<h3>Kurulum</h3>
+<h2>⚙️ Kurulum ve Ayarlar (3 Adımda Tamamlayın!)</h2>
 
-<h4>1. Eklentiyi Kurun</h4>
-<ol>
-<li>Bu repository'yi ZIP dosyası olarak indirin.</li>
-<li>WordPress admin panelinde <strong>Eklentiler > Yeni Ekle > Eklenti Yükle</strong> adımlarını izleyerek indirdiğiniz ZIP dosyasını yükleyin ve etkinleştirin.</li>
-</ol>
+<h3>1. Eklentiyi Kurun</h3>
+<ul>
+  <li>Eklentiyi aşağıdaki linkten indirin:</li>
+  <p><a href="[Eklenti İndirme Linki](https://github.com/turanbagtur/manga-sorun-bildirme-eklentisi/releases/tag/sorunbildirim-v1.4)">📥 Eklenti İndirme Linki</a></p>
+  <li>WordPress admin panelinize gidin ve <strong>Eklentiler > Yeni Ekle > Eklenti Yükle</strong> adımlarını takip ederek indirdiğiniz ZIP dosyasını yükleyin ve etkinleştirin.</li>
+</ul>
 
-<h4>2. Discord Ayarını Yapın</h4>
-<ol>
-<li>Discord'da bildirimler için bir kanal oluşturun ve bu kanalın Webhook URL'sini alın.</li>
-<li>WordPress admin panelinde <strong>Sorun Bildirimi > Ayarlar</strong> sayfasına giderek bu URL'yi yapıştırın ve kaydedin.</li>
-</ol>
+<h3>2. Discord Webhook Ayarı</h3>
+<ul>
+  <li>Discord’da sorun bildirimleri için yeni bir kanal oluşturun.</li>
+  <li>Kanal ayarlarına giderek bir Webhook oluşturun ve URL’sini kopyalayın.</li>
+  <li>WordPress admin panelinde <strong>Sorun Bildirimi > Ayarlar</strong> sayfasına giderek kopyaladığınız Webhook URL’sini yapıştırın ve kaydedin.</li>
+</ul>
 
-<h4>3. Butonu Ekleyin</h4>
-<p>Manga bölümlerinizin gösterildiği tema dosyanıza (<code>single.php</code> veya ilgili bir şablon dosyası), butonun görünmesini istediğiniz yere aşağıdaki kodu ekleyin:</p>
+<h3>3. Butonu Ekleyin</h3>
+<ul>
+  <li>Manga bölümlerinizin görüntülendiği tema dosyasını açın (<code>single.php</code> veya benzeri).</li>
+  <li><strong>Mangareader teması</strong> için yol: <code>template-parts/single/single-advanced.php</code></li>
+  <li>Okuma alanının altına veya istediğiniz herhangi bir yere şu kodu ekleyin:</li>
+</ul>
 
-<pre><code>&lt;?php echo do_shortcode('[sorun_bildir_formu]'); ?&gt;</code></pre>
+<pre><code>&lt;?php echo do_shortcode('[sorun_bildir_formu]'); ?&gt;
+</code></pre>
+
+<h2>🎉 Hepsi Bu Kadar!</h2>
+<p>Artık okuyucularınızdan gelen bildirimleri otomatik olarak Discord’unuzda görebilirsiniz. Sorularınız veya geri bildirimleriniz için bize ulaşmaktan çekinmeyin.</p>
