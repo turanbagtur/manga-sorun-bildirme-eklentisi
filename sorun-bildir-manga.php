@@ -3,16 +3,23 @@
  * Plugin Name: Manga Sorun Bildirme Eklentisi
  * Plugin URI:  https://mangaruhu.com
  * Description: Manga siteniz için kullanıcıların sorun bildirmesini sağlayan basit bir eklenti.
- * Version:     1.4
+ * Version:     1.5
  * Author:      Solderet x Gemini
  * Author URI:  https://mangaruhu.com
  * Text Domain: sorun-bildir-manga
+ * Domain Path: /languages
  */
 
 // Doğrudan erişimi engelle
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
+
+// Çoklu dil desteğini başlat
+function sbm_load_textdomain() {
+    load_plugin_textdomain( 'sorun-bildir-manga', false, dirname( plugin_basename( __FILE__ ) ) . '/languages/' );
+}
+add_action( 'init', 'sbm_load_textdomain' );
 
 // Eklentiyi etkinleştirdiğinizde çalışacak fonksiyon
 register_activation_hook( __FILE__, 'sbm_aktivasyon' );
@@ -45,8 +52,8 @@ add_action( 'admin_menu', 'sbm_admin_menusu' );
 
 function sbm_admin_menusu() {
     add_menu_page(
-        'Manga Sorun Bildirimleri',
-        'Sorun Bildirimi',
+        __( 'Manga Sorun Bildirimleri', 'sorun-bildir-manga' ),
+        __( 'Sorun Bildirimi', 'sorun-bildir-manga' ),
         'manage_options',
         'manga-sorun-bildirimleri',
         'sbm_sorun_bildirimleri_sayfasi',
@@ -55,8 +62,8 @@ function sbm_admin_menusu() {
     );
     add_submenu_page(
         'manga-sorun-bildirimleri',
-        'Eklenti Ayarları',
-        'Ayarlar',
+        __( 'Eklenti Ayarları', 'sorun-bildir-manga' ),
+        __( 'Ayarlar', 'sorun-bildir-manga' ),
         'manage_options',
         'manga-sorun-ayarlari',
         'sbm_ayarlar_sayfasi'
@@ -67,13 +74,13 @@ function sbm_admin_menusu() {
 function sbm_ayarlar_sayfasi() {
     ?>
     <div class="wrap">
-        <h1>Manga Sorun Bildirme Eklentisi Ayarları</h1>
+        <h1><?php echo esc_html__( 'Manga Sorun Bildirme Eklentisi Ayarları', 'sorun-bildir-manga' ); ?></h1>
         <form method="post" action="options.php">
             <?php settings_fields( 'sbm_ayarlar_grubu' ); ?>
             <?php do_settings_sections( 'sbm_ayarlar_grubu' ); ?>
             <table class="form-table">
                 <tr valign="top">
-                    <th scope="row">Discord Webhook URL</th>
+                    <th scope="row"><?php echo esc_html__( 'Discord Webhook URL', 'sorun-bildir-manga' ); ?></th>
                     <td><input type="text" name="sbm_discord_webhook" value="<?php echo esc_attr( get_option( 'sbm_discord_webhook' ) ); ?>" style="width: 100%;" /></td>
                 </tr>
             </table>
@@ -109,7 +116,7 @@ function sbm_sorun_bildirimleri_sayfasi() {
                 array( 'id' => $id )
             );
             
-            echo '<div class="notice notice-success is-dismissible"><p>Durum başarıyla güncellendi.</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Durum başarıyla güncellendi.', 'sorun-bildir-manga' ) . '</p></div>';
         }
     }
     
@@ -122,26 +129,26 @@ function sbm_sorun_bildirimleri_sayfasi() {
             
             $wpdb->delete( $table_name, array( 'id' => $id ) );
             
-            echo '<div class="notice notice-success is-dismissible"><p>Sorun bildirimi başarıyla silindi.</p></div>';
+            echo '<div class="notice notice-success is-dismissible"><p>' . esc_html__( 'Sorun bildirimi başarıyla silindi.', 'sorun-bildir-manga' ) . '</p></div>';
         }
     }
 
     $sorunlar = $wpdb->get_results( "SELECT * FROM $table_name ORDER BY olusturma_tarihi DESC", ARRAY_A );
     ?>
     <div class="wrap">
-        <h1>Manga Sorun Bildirimleri</h1>
+        <h1><?php echo esc_html__( 'Manga Sorun Bildirimleri', 'sorun-bildir-manga' ); ?></h1>
         <?php if ( ! empty( $sorunlar ) ) : ?>
             <table class="wp-list-table widefat fixed striped">
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Manga/Bölüm Adı</th>
-                        <th>Sorun Türü</th>
-                        <th>Açıklama</th>
-                        <th>Kullanıcı</th>
-                        <th>Durum</th>
-                        <th>Tarih</th>
-                        <th>Eylemler</th>
+                        <th><?php echo esc_html__( 'ID', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Manga/Bölüm Adı', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Sorun Türü', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Açıklama', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Kullanıcı', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Durum', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Tarih', 'sorun-bildir-manga' ); ?></th>
+                        <th><?php echo esc_html__( 'Eylemler', 'sorun-bildir-manga' ); ?></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -164,22 +171,21 @@ function sbm_sorun_bildirimleri_sayfasi() {
                                 $nonce_cozuldu = wp_create_nonce( 'sbm_durum_guncelle_' . $sorun['id'] );
                                 $nonce_sil = wp_create_nonce( 'sbm_sil_' . $sorun['id'] );
 
-                                // Yalnızca durum "bekliyor" ise İnceleniyor ve Çözüldü butonlarını göster
                                 if ( $sorun['durum'] === 'bekliyor' ) {
-                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=inceleniyor&_wpnonce=' . $nonce_inceleniyor ) ) . '" class="button">İnceleniyor</a> ';
-                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=cozuldu&_wpnonce=' . $nonce_cozuldu ) ) . '" class="button button-primary">Çözüldü</a> ';
+                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=inceleniyor&_wpnonce=' . $nonce_inceleniyor ) ) . '" class="button">' . esc_html__( 'İnceleniyor', 'sorun-bildir-manga' ) . '</a> ';
+                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=cozuldu&_wpnonce=' . $nonce_cozuldu ) ) . '" class="button button-primary">' . esc_html__( 'Çözüldü', 'sorun-bildir-manga' ) . '</a> ';
                                 } elseif ( $sorun['durum'] === 'inceleniyor' ) {
-                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=cozuldu&_wpnonce=' . $nonce_cozuldu ) ) . '" class="button button-primary">Çözüldü</a> ';
+                                    echo '<a href="' . esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_durum_guncelle&id=' . $sorun['id'] . '&durum=cozuldu&_wpnonce=' . $nonce_cozuldu ) ) . '" class="button button-primary">' . esc_html__( 'Çözüldü', 'sorun-bildir-manga' ) . '</a> ';
                                 }
                                 ?>
-                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_sil&id=' . $sorun['id'] . '&_wpnonce=' . $nonce_sil ) ); ?>" class="button button-secondary" onclick="return confirm('Bu sorun bildirimini silmek istediğinizden emin misiniz?');">Sil</a>
+                                <a href="<?php echo esc_url( admin_url( 'admin.php?page=manga-sorun-bildirimleri&action=sbm_sil&id=' . $sorun['id'] . '&_wpnonce=' . $nonce_sil ) ); ?>" class="button button-secondary" onclick="return confirm('<?php echo esc_js( __( 'Bu sorun bildirimini silmek istediğinizden emin misiniz?', 'sorun-bildir-manga' ) ); ?>');"><?php echo esc_html__( 'Sil', 'sorun-bildir-manga' ); ?></a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
             </table>
         <?php else : ?>
-            <p>Şu anda bildirilen bir sorun bulunmamaktadır.</p>
+            <p><?php echo esc_html__( 'Şu anda bildirilen bir sorun bulunmamaktadır.', 'sorun-bildir-manga' ); ?></p>
         <?php endif; ?>
     </div>
     <?php
@@ -190,17 +196,20 @@ add_action( 'wp_enqueue_scripts', 'sbm_frontend_scriptleri' );
 add_action( 'admin_enqueue_scripts', 'sbm_backend_scriptleri' );
 
 function sbm_frontend_scriptleri() {
-    wp_enqueue_style( 'sbm-style', plugin_dir_url( __FILE__ ) . 'assets/css/style.css', array(), '1.3' );
-    wp_enqueue_script( 'sbm-script', plugin_dir_url( __FILE__ ) . 'assets/js/script.js', array( 'jquery' ), '1.3', true );
+    wp_enqueue_style( 'sbm-style', plugin_dir_url( __FILE__ ) . 'assets/css/style.css', array(), '1.5' );
+    wp_enqueue_script( 'sbm-script', plugin_dir_url( __FILE__ ) . 'assets/js/script.js', array( 'jquery' ), '1.5', true );
     
     wp_localize_script( 'sbm-script', 'sbm_ajax_obj', array(
         'ajax_url' => admin_url( 'admin-ajax.php' ),
-        'nonce'    => wp_create_nonce( 'sbm_nonce' )
+        'nonce'    => wp_create_nonce( 'sbm_nonce' ),
+        'sending_text' => esc_html__( 'Gönderiliyor...', 'sorun-bildir-manga' ),
+        'success_message' => esc_html__( 'Sorun bildirimi başarıyla iletilmiştir. Teşekkür ederiz!', 'sorun-bildir-manga' ),
+        'error_message' => esc_html__( 'Bir hata oluştu. Lütfen tekrar deneyin.', 'sorun-bildir-manga' ),
     ) );
 }
 
 function sbm_backend_scriptleri() {
-    wp_enqueue_style( 'sbm-admin-style', plugin_dir_url( __FILE__ ) . 'assets/css/admin-style.css', array(), '1.3' );
+    wp_enqueue_style( 'sbm-admin-style', plugin_dir_url( __FILE__ ) . 'assets/css/admin-style.css', array(), '1.5' );
 }
 
 // AJAX ile form verilerini işleme
@@ -256,7 +265,7 @@ function sbm_sorun_bildir_callback() {
             );
         }
 
-        wp_send_json_success( 'Sorun bildiriminiz başarıyla iletilmiştir. Teşekkür ederiz!' );
+        wp_send_json_success( 'Sorun bildirimi başarıyla iletilmiştir. Teşekkür ederiz!' );
     }
 }
 
@@ -265,43 +274,50 @@ function sbm_discord_mesaj_gonder($id, $manga_adi, $manga_url, $sorun_turu, $aci
     $webhook_url = get_option('sbm_discord_webhook');
     if ( empty($webhook_url) ) { return false; }
 
-    $aciklama = empty($aciklama) ? 'Açıklama girilmedi.' : $aciklama;
+    $aciklama = empty($aciklama) ? __('Açıklama girilmedi.', 'sorun-bildir-manga') : $aciklama;
     $site_adi = get_bloginfo('name');
-    
+
+    $renk = 5793266; // Gri renk
+    if ($sorun_turu === 'Bölüm açılmıyor') { $renk = 15158332; }
+    elseif ($sorun_turu === 'Yanlış bölüm') { $renk = 16776960; }
+    elseif ($sorun_turu === 'Eksik sayfalar') { $renk = 3066993; }
+    elseif ($sorun_turu === 'Çeviri hatası') { $renk = 1146986; }
+    elseif ($sorun_turu === 'Sayfalar karışmış') { $renk = 15548997; }
+
     $payload = array(
         'username' => 'Manga Sorun Bildirimi',
         'embeds' => array(
             array(
-                'title' => 'Yeni Sorun Bildirimi (#'.$id.')',
-                'color' => 15158332, // Kırmızı
+                'title' => __('Yeni Sorun Bildirimi', 'sorun-bildir-manga') . ' (#'.$id.')',
+                'color' => $renk,
                 'fields' => array(
                     array(
-                        'name' => 'Manga/Bölüm Adı',
+                        'name' => '❯ ' . __('Manga/Bölüm Adı', 'sorun-bildir-manga'),
                         'value' => '[' . $manga_adi . '](' . $manga_url . ')',
                         'inline' => false
                     ),
                     array(
-                        'name' => 'Sorun Türü',
+                        'name' => '❯ ' . __('Sorun Türü', 'sorun-bildir-manga'),
                         'value' => $sorun_turu,
                         'inline' => false
                     ),
                     array(
-                        'name' => 'Açıklama',
+                        'name' => '❯ ' . __('Açıklama', 'sorun-bildir-manga'),
                         'value' => $aciklama,
                         'inline' => false
                     ),
                     array(
-                        'name' => 'Bildiren Kullanıcı',
+                        'name' => '❯ ' . __('Bildiren Kullanıcı', 'sorun-bildir-manga'),
                         'value' => $kullanici_adi,
                         'inline' => false
                     ),
                     array(
-                        'name' => 'Durum',
-                        'value' => 'Bekliyor',
+                        'name' => '❯ ' . __('Durum', 'sorun-bildir-manga'),
+                        'value' => __('Bekliyor', 'sorun-bildir-manga'),
                         'inline' => false
                     )
                 ),
-                'footer' => array('text' => 'Gönderim Yeri: '.$site_adi),
+                'footer' => array('text' => sprintf(__( 'Gönderim Yeri: %s', 'sorun-bildir-manga' ), $site_adi)),
                 'timestamp' => date('c')
             )
         )
@@ -336,28 +352,35 @@ function sbm_discord_mesaj_guncelle($id, $yeni_durum) {
     $webhook_url = get_option('sbm_discord_webhook');
     if ( empty($webhook_url) || empty($sorun['discord_mesaj_id']) ) { return false; }
 
-    $aciklama = empty($sorun['sorun_aciklamasi']) ? 'Açıklama girilmedi.' : $sorun['sorun_aciklamasi'];
-    $renk = 15158332; // Kırmızı (Bekliyor)
+    $aciklama = empty($sorun['sorun_aciklamasi']) ? __('Açıklama girilmedi.', 'sorun-bildir-manga') : $sorun['sorun_aciklamasi'];
+    $renk = 5793266; // Gri (Varsayılan)
+    $durum_text = '';
+
     if ($yeni_durum === 'inceleniyor') {
         $renk = 16776960; // Turuncu
+        $durum_text = __('İnceleniyor', 'sorun-bildir-manga');
     } elseif ($yeni_durum === 'cozuldu') {
         $renk = 3066993; // Yeşil
+        $durum_text = __('Çözüldü', 'sorun-bildir-manga');
+    } else {
+        $renk = 15158332; // Kırmızı (Bekliyor)
+        $durum_text = __('Bekliyor', 'sorun-bildir-manga');
     }
 
     $payload = array(
         'username' => 'Manga Sorun Bildirimi',
         'embeds' => array(
             array(
-                'title' => 'Sorun Bildirimi (#'.$sorun['id'].') - Durum Güncellendi',
+                'title' => __('Sorun Bildirimi', 'sorun-bildir-manga') . ' (#'.$sorun['id'].') - ' . $durum_text,
                 'color' => $renk,
                 'fields' => array(
-                    array('name' => 'Manga/Bölüm Adı', 'value' => '[' . $sorun['manga_adi'] . '](' . $sorun['manga_url'] . ')', 'inline' => false),
-                    array('name' => 'Sorun Türü', 'value' => $sorun['sorun_turu'], 'inline' => false),
-                    array('name' => 'Açıklama', 'value' => $aciklama, 'inline' => false),
-                    array('name' => 'Bildiren Kullanıcı', 'value' => $sorun['kullanici_adi'], 'inline' => false),
-                    array('name' => 'Durum', 'value' => ucfirst($yeni_durum), 'inline' => false)
+                    array('name' => '❯ ' . __('Manga/Bölüm Adı', 'sorun-bildir-manga'), 'value' => '[' . $sorun['manga_adi'] . '](' . $sorun['manga_url'] . ')', 'inline' => false),
+                    array('name' => '❯ ' . __('Sorun Türü', 'sorun-bildir-manga'), 'value' => $sorun['sorun_turu'], 'inline' => false),
+                    array('name' => '❯ ' . __('Açıklama', 'sorun-bildir-manga'), 'value' => $aciklama, 'inline' => false),
+                    array('name' => '❯ ' . __('Bildiren Kullanıcı', 'sorun-bildir-manga'), 'value' => $sorun['kullanici_adi'], 'inline' => false),
+                    array('name' => '❯ ' . __('Durum', 'sorun-bildir-manga'), 'value' => $durum_text, 'inline' => false)
                 ),
-                'footer' => array('text' => 'Bu mesaj otomatik olarak sitenizden güncellenmiştir.'),
+                'footer' => array('text' => __('Bu mesaj otomatik olarak sitenizden güncellenmiştir.', 'sorun-bildir-manga')),
                 'timestamp' => date('c')
             )
         )
@@ -402,42 +425,44 @@ function sbm_sorun_bildirim_shortcode() {
 
     ob_start();
     ?>
-    <button id="sbm-open-form" class="sbm-button">Sorun Bildir</button>
+    <button id="sbm-open-form" class="sbm-button">
+        <span class="dashicons dashicons-warning"></span> <?php echo esc_html__( 'Sorun Bildir', 'sorun-bildir-manga' ); ?>
+    </button>
     <div id="sbm-form-modal" class="sbm-modal">
         <div class="sbm-modal-content">
             <span id="sbm-close-form" class="sbm-close">&times;</span>
-            <h3>Sorun Bildir</h3>
+            <h3><?php echo esc_html__( 'Sorun Bildir', 'sorun-bildir-manga' ); ?></h3>
             <form id="sbm-sorun-formu">
                 <p>
-                    <label for="manga_adi">Manga/Bölüm Adı:</label>
+                    <label for="manga_adi"><?php echo esc_html__( 'Manga/Bölüm Adı:', 'sorun-bildir-manga' ); ?></label>
                     <input type="text" id="manga_adi" name="manga_adi" value="<?php echo esc_attr($manga_adi); ?>" readonly>
                 </p>
                 <?php if ( ! is_user_logged_in() ) : ?>
                 <p>
-                    <label for="kullanici_adi">Adınız (isteğe bağlı):</label>
-                    <input type="text" id="kullanici_adi" name="kullanici_adi" placeholder="Misafir">
+                    <label for="kullanici_adi"><?php echo esc_html__( 'Adınız (isteğe bağlı):', 'sorun-bildir-manga' ); ?></label>
+                    <input type="text" id="kullanici_adi" name="kullanici_adi" placeholder="<?php echo esc_attr__( 'Misafir', 'sorun-bildir-manga' ); ?>">
                 </p>
                 <?php else: ?>
                 <input type="hidden" id="kullanici_adi" name="kullanici_adi" value="<?php echo esc_attr($kullanici_adi); ?>">
                 <?php endif; ?>
                 <input type="hidden" name="manga_url" value="<?php echo esc_url($manga_url); ?>">
                 <p>
-                    <label for="sorun_turu">Sorun Türü:</label>
+                    <label for="sorun_turu"><?php echo esc_html__( 'Sorun Türü:', 'sorun-bildir-manga' ); ?></label>
                     <select id="sorun_turu" name="sorun_turu" required>
-                        <option value="">Seçiniz...</option>
-                        <option value="Bölüm açılmıyor">Bölüm açılmıyor</option>
-                        <option value="Yanlış bölüm">Yanlış bölüm</option>
-                        <option value="Eksik sayfalar">Eksik sayfalar</option>
-                        <option value="Çeviri hatası">Çeviri hatası</option>
-                        <option value="Sayfalar karışmış">Sayfalar karışmış</option>
-                        <option value="Diğer">Diğer</option>
+                        <option value=""><?php echo esc_html__( 'Seçiniz...', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Bölüm açılmıyor"><?php echo esc_html__( 'Bölüm açılmıyor', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Yanlış bölüm"><?php echo esc_html__( 'Yanlış bölüm', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Eksik sayfalar"><?php echo esc_html__( 'Eksik sayfalar', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Çeviri hatası"><?php echo esc_html__( 'Çeviri hatası', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Sayfalar karışmış"><?php echo esc_html__( 'Sayfalar karışmış', 'sorun-bildir-manga' ); ?></option>
+                        <option value="Diğer"><?php echo esc_html__( 'Diğer', 'sorun-bildir-manga' ); ?></option>
                     </select>
                 </p>
                 <p>
-                    <label for="aciklama">Açıklama (isteğe bağlı):</label>
+                    <label for="aciklama"><?php echo esc_html__( 'Açıklama (isteğe bağlı):', 'sorun-bildir-manga' ); ?></label>
                     <textarea id="aciklama" name="aciklama" rows="4"></textarea>
                 </p>
-                <input type="submit" value="Gönder" class="button button-primary">
+                <input type="submit" value="<?php echo esc_attr__( 'Gönder', 'sorun-bildir-manga' ); ?>" class="button button-primary">
             </form>
         </div>
     </div>

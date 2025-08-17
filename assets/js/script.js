@@ -21,21 +21,23 @@ jQuery(document).ready(function($) {
         e.preventDefault();
 
         var form = $(this);
+        var submitButton = form.find('input[type="submit"]');
+        var originalButtonText = submitButton.val();
         var formData = form.serialize() + '&action=sbm_sorun_bildir&nonce=' + sbm_ajax_obj.nonce;
 
         form.find('input, select, textarea, button').prop('disabled', true);
         form.find('.sbm-alert').remove();
-        form.prepend('<div class="sbm-loading">Lütfen bekleyin...</div>');
+        submitButton.val(sbm_ajax_obj.sending_text);
 
         $.post(sbm_ajax_obj.ajax_url, formData, function(response) {
-            form.find('.sbm-loading').remove();
+            submitButton.val(originalButtonText);
             
             if (response.success) {
-                form.prepend('<div class="sbm-alert sbm-success">' + response.data + '</div>');
+                form.prepend('<div class="sbm-alert sbm-success">' + sbm_ajax_obj.success_message + '</div>');
                 form[0].reset();
             } else {
                 form.find('input, select, textarea, button').prop('disabled', false);
-                form.prepend('<div class="sbm-alert sbm-error">' + response.data + '</div>');
+                form.prepend('<div class="sbm-alert sbm-error">' + sbm_ajax_obj.error_message + '</div>');
             }
         });
     });

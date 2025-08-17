@@ -1,3 +1,6 @@
+/*
+Eklenti Sürümü: 1.5
+*/
 .sbm-durum-bekliyor {
     background-color: #e74c3c;
     color: #fff;
@@ -19,3 +22,8 @@
 .wp-list-table .button {
     margin: 2px;
 }
+
+/* Yeni Discord renkleriyle uyumlu durum etiketleri */
+.sbm-durum-bekliyor { background-color: #e74c3c; color: #fff; } /* Kırmızı */
+.sbm-durum-inceleniyor { background-color: #f39c12; color: #fff; } /* Turuncu */
+.sbm-durum-cozuldu { background-color: #2ecc71; color: #fff; } /* Yeşil */
